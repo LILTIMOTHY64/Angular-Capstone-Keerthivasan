@@ -11,62 +11,15 @@
   <app-error-message />
   <app-loading-spinner />
 
-  <!-- Success message with countdown spinner before redirect -->
-  @if (saved()) {
-    <div
-      class="bg-white border rounded-lg p-8 shadow-lg text-center"
-      style="border-color: var(--flopkart-border)"
-    >
-      <div class="mb-4">
-        <svg
-          class="mx-auto h-16 w-16 text-green-500"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-      </div>
-      <!-- Success message varies based on edit vs create mode -->
-      <h2 class="text-2xl font-bold mb-2" style="color: var(--flopkart-dark)" i18n="@@savedSuccess">
-        @if (isEditMode()) {
-          Product updated successfully!
-        } @else {
-          Product created successfully!
-        }
-      </h2>
-      <!-- Redirect message varies based on edit vs create mode -->
-      <p class="mb-6" style="color: var(--color-text-light)">
-        @if (isEditMode()) {
-          <span i18n="@@redirectingToProduct">Redirecting to product page...</span>
-        } @else {
-          <span i18n="@@redirectingToAllProducts">Redirecting to All Products page...</span>
-        }
-      </p>
-      <!-- Loading spinner during 2s delay before redirect -->
-      <div class="flex justify-center">
-        <div
-          class="animate-spin rounded-full h-8 w-8 border-b-2"
-          style="border-color: var(--flopkart-blue)"
-        ></div>
-      </div>
-    </div>
-  } @else {
-    <!-- Form wrapper with product form component -->
-    <div
-      class="bg-white rounded-lg shadow-sm border p-8"
-      style="border-color: var(--flopkart-border)"
-    >
-      <app-product-form
-        [product]="editingProduct()"
-        [categories]="categories()"
-        (formSubmit)="onFormSubmit($event)"
-      />
-    </div>
-  }
+  <!-- Form wrapper with product form component -->
+  <div
+    class="bg-white rounded-lg shadow-sm border p-8"
+    style="border-color: var(--flopkart-border)"
+  >
+    <app-product-form
+      [product]="editingProduct()"
+      [categories]="categories()"
+      (formSubmit)="onFormSubmit($event)"
+    />
+  </div>
 </main>

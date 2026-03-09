@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { CartIconComponent } from '../../components/cart/cart-icon/cart-icon.component';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 /**
  * Main navigation header component
@@ -27,17 +28,17 @@ export class HeaderComponent {
   /** Router for programmatic navigation after logout */
   protected readonly router = inject(Router);
 
+  /** Toast notifications */
+  private readonly toastService = inject(ToastService);
+
   /** Controls mobile menu visibility (collapsed/expanded) */
   protected readonly menuOpen = signal(false);
-
-  /** Tracks logout in-progress state to show feedback message */
-  protected readonly loggingOut = signal(false);
 
   /**
    * Toggles the mobile menu between open and closed states
    */
   protected toggleMenu(): void {
-    this.menuOpen.update((v) => !v);
+    this.menuOpen.update((isOpen) => !isOpen);
   }
 
   /**
@@ -58,13 +59,9 @@ export class HeaderComponent {
    * 5. Navigate to login page and reset loggingOut flag
    */
   protected logout(): void {
-    this.loggingOut.set(true);
     this.authService.logout();
     this.closeMenu();
-    // Show logout message for 1.5 seconds before redirecting
-    setTimeout(() => {
-      this.router.navigate(['/']);
-      this.loggingOut.set(false);
-    }, 1500);
+    this.toastService.info('You have been logged out.');
+    this.router.navigate(['/']);
   }
 }

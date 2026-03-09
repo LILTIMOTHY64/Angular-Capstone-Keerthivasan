@@ -4,6 +4,7 @@ import { Title } from '@angular/platform-browser';
 import { filter } from 'rxjs/operators';
 import { HeaderComponent } from './shared/header/header.component';
 import { FooterComponent } from './shared/footer/footer.component';
+import { ToastComponent } from './shared/toast/toast.component';
 
 /**
  * Root component: layout with Header + RouterOutlet + Footer
@@ -12,7 +13,7 @@ import { FooterComponent } from './shared/footer/footer.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, FooterComponent],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent, ToastComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,11 +26,11 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     // Update document title from route data on navigation end
     this.router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe(() => {
-      let rt = this.route.root;
-      while (rt.firstChild) rt = rt.firstChild;
-      const data = rt.snapshot.data as { title?: string } | undefined;
-      const title = data && data.title ? `Flopkart - ${data.title}` : 'Flopkart';
-      this.title.setTitle(title);
+      let activeRoute = this.route.root;
+      while (activeRoute.firstChild) activeRoute = activeRoute.firstChild;
+      const routeData = activeRoute.snapshot.data as { title?: string } | undefined;
+      const pageTitle = routeData && routeData.title ? `Flopkart - ${routeData.title}` : 'Flopkart';
+      this.title.setTitle(pageTitle);
     });
   }
 }

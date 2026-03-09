@@ -14,6 +14,8 @@ import { ProductFormComponent } from '../../components/products/product-form/pro
 import { ErrorMessageComponent } from '../../shared/error-message/error-message.component';
 import { LoadingSpinnerComponent } from '../../shared/loading-spinner/loading-spinner.component';
 import { Product, ProductPayload } from '../../models/product.model';
+import { ToastService } from '../../services/toast.service';
+import { AuthService } from '../../services/auth.service';
 
 /**
  * Create new product (/add) or edit existing (/manageProduct/:id)
@@ -33,10 +35,11 @@ export class ProductManagePageComponent implements OnInit {
   private readonly apiService = inject(ApiService);
   private readonly errorService = inject(ErrorService);
   private readonly loadingService = inject(LoadingService);
+  private readonly toastService = inject(ToastService);
+  private readonly authService = inject(AuthService);
 
   // State
   protected readonly editingProduct = signal<Product | null>(null);
-  protected readonly saved = signal(false);
   protected readonly categories = signal<string[]>([]);
 
   // Computed: true if editing (id in URL), false if creating
@@ -45,19 +48,19 @@ export class ProductManagePageComponent implements OnInit {
   ngOnInit(): void {
     // Load categories for the category select on both Add and Edit pages
     this.apiService.getCategories().subscribe({
-      next: (cats) => this.categories.set(cats),
+      next: (categories) => this.categories.set(categories),
       error: () => {
         // if categories fail to load, the form will fall back to a text input
       },
     });
-    const idStr = this.route.snapshot.paramMap.get('id');
-    if (!idStr) return;
-    const id = Number(idStr);
-    if (Number.isNaN(id)) return;
+    const rawIdParam = this.route.snapshot.paramMap.get('id');
+    if (!rawIdParam) return;
+    const productId = Number(rawIdParam);
+    if (Number.isNaN(productId)) return;
 
     // Load product data for edit mode
     this.loadingService.show();
-    this.apiService.getProductById(id).subscribe({
+    this.apiService.getProductById(productId).subscribe({
       next: (data) => {
         this.editingProduct.set(data);
         this.loadingService.hide();
@@ -71,6 +74,11 @@ export class ProductManagePageComponent implements OnInit {
 
   // Handle form submission (create or update)
   protected onFormSubmit(payload: ProductPayload): void {
+    if (!this.authService.isOwner()) {
+      this.toastService.error('You are not authorized to edit this product.');
+      return;
+    }
+
     const editing = this.editingProduct();
     this.loadingService.show();
 
@@ -79,41 +87,45 @@ export class ProductManagePageComponent implements OnInit {
       this.apiService.updateProduct(editing.id, payload).subscribe({
         next: (updated) => {
           this.loadingService.hide();
-          this.saved.set(true);
+          if (!updated) {
+            this.toastService.error('Failed to update product.');
+            return;
+          }
+          this.toastService.success('Product updated successfully!');
           // Merge the updated response with the original editing product so
           // any missing fields (for example rating) are preserved for
           // immediate rendering on the detail page.
           const original = this.editingProduct();
           const merged: Product = {
-            // Start with original full product, then overwrite with updated
             ...(original ?? ({} as Product)),
             ...updated,
           } as Product;
-          // Redirect to product detail page after 2 seconds and pass the
-          // merged product in navigation state so the detail page can
-          // render it immediately without an extra fetch.
           setTimeout(() => {
             this.router.navigate(['/products', merged.id], { state: { product: merged } });
           }, 2000);
         },
-        error: () => {
-          this.errorService.setError('Failed to update product.');
+        error: (err) => {
+          this.toastService.error(err?.message || 'Failed to save.');
           this.loadingService.hide();
         },
       });
     } else {
       // Create new product
       this.apiService.createProduct(payload).subscribe({
-        next: () => {
+        next: (created) => {
           this.loadingService.hide();
-          this.saved.set(true);
+          if (!created) {
+            this.toastService.error('Failed to create product.');
+            return;
+          }
+          this.toastService.success('Product created successfully!');
           // Redirect to all products page after 2 seconds
           setTimeout(() => {
             this.router.navigateByUrl('/products');
           }, 2000);
         },
-        error: () => {
-          this.errorService.setError('Failed to create product.');
+        error: (err) => {
+          this.toastService.error(err?.message || 'Failed to save.');
           this.loadingService.hide();
         },
       });

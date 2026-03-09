@@ -19,6 +19,7 @@ import { ErrorMessageComponent } from '../../shared/error-message/error-message.
 import { Product } from '../../models/product.model';
 import { CartAction } from '../../models/cart.model';
 import { Title } from '@angular/platform-browser';
+import { ToastService } from '../../services/toast.service';
 
 /**
  * Single product detail page with add-to-cart and delete options
@@ -41,35 +42,37 @@ export class ProductDetailPageComponent implements OnInit {
   private readonly loadingService = inject(LoadingService);
   private readonly errorService = inject(ErrorService);
   private readonly title = inject(Title);
+  private readonly toastService = inject(ToastService);
   protected readonly Math = Math;
 
   // State
   protected readonly product = signal<Product | null>(null);
   protected readonly deleteConfirm = signal(false);
-  protected readonly deleted = signal(false);
 
   // Convert cart items observable to signal for reactive updates
   protected readonly cartItems = toSignal(this.cartService.items$, { initialValue: [] });
 
   // Computed quantity: automatically updates when product or cart items change
   protected readonly quantity = computed(() => {
-    const p = this.product();
-    const items = this.cartItems();
-    return p ? (items.find((i) => i.productId === p.id)?.quantity ?? 0) : 0;
+    const currentProduct = this.product();
+    const cartItems = this.cartItems();
+    return currentProduct
+      ? (cartItems.find((cartItem) => cartItem.productId === currentProduct.id)?.quantity ?? 0)
+      : 0;
   });
 
   // Lifecycle hook: initialize component
   ngOnInit(): void {
-    const idStr = this.route.snapshot.paramMap.get('id');
-    const id = idStr ? Number(idStr) : Number.NaN;
-    if (Number.isNaN(id)) return;
+    const rawIdParam = this.route.snapshot.paramMap.get('id');
+    const productId = rawIdParam ? Number(rawIdParam) : Number.NaN;
+    if (Number.isNaN(productId)) return;
     // First: check browser history.state for a product (set when navigating
     // with Router.navigate(..., { state })) and render that immediately to
     // avoid an extra fetch. Avoid calling deprecated Router.getCurrentNavigation().
     const navStateProduct = (history.state && (history.state as any).product) as
       | Product
       | undefined;
-    if (navStateProduct && navStateProduct.id === id) {
+    if (navStateProduct && navStateProduct.id === productId) {
       this.product.set(navStateProduct);
       // Set page title immediately when a product is provided via navigation state
       this.title.setTitle(`Flopkart - ${navStateProduct.title}`);
@@ -78,7 +81,7 @@ export class ProductDetailPageComponent implements OnInit {
 
     this.loadingService.show();
     // Fetch product details by ID
-    this.apiService.getProductById(id).subscribe({
+    this.apiService.getProductById(productId).subscribe({
       next: (data) => {
         this.product.set(data);
         this.loadingService.hide();
@@ -94,14 +97,14 @@ export class ProductDetailPageComponent implements OnInit {
 
   // Cart action dispatcher — single method replaces add/increment/decrement
   protected onCartAction(action: CartAction): void {
-    const p = this.product();
-    if (!p) return;
+    const product = this.product();
+    if (!product) return;
     if (action === 'add') {
-      this.cartService.addItem({ productId: p.id, title: p.title, price: p.price, image: p.image });
+      this.cartService.addItem({ productId: product.id, title: product.title, price: product.price, image: product.image });
     } else if (action === 'increment') {
-      this.cartService.incrementItem(p.id);
+      this.cartService.incrementItem(product.id);
     } else if (action === 'decrement') {
-      this.cartService.decrementItem(p.id);
+      this.cartService.decrementItem(product.id);
     }
   }
 
@@ -125,14 +128,14 @@ export class ProductDetailPageComponent implements OnInit {
     this.apiService.deleteProduct(p.id).subscribe({
       next: () => {
         this.loadingService.hide();
-        this.deleted.set(true);
+        this.toastService.success('Product deleted successfully.');
         // Redirect to products list after 2 seconds
         setTimeout(() => {
           this.router.navigateByUrl('/products');
         }, 2000);
       },
       error: () => {
-        this.errorService.setError('Failed to delete product.');
+        this.toastService.error('Failed to delete product. Please try again.');
         this.loadingService.hide();
       },
     });

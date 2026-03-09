@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject, signal, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { ErrorService } from '../../services/error.service';
 import { ErrorMessageComponent } from '../../shared/error-message/error-message.component';
+import { ToastService } from '../../services/toast.service';
 
 /**
  * Login page with form validation
@@ -21,10 +22,7 @@ export class LoginPageComponent {
   private readonly authService = inject(AuthService);
   private readonly errorService = inject(ErrorService);
   private readonly router = inject(Router);
-
-  // Track login success state and display name for popup
-  protected readonly isLoggedIn = signal(false);
-  protected readonly displayName = computed(() => this.authService.displayName());
+  private readonly toastService = inject(ToastService);
 
   // Reactive form with username and password validation
   protected readonly form = new FormGroup({
@@ -45,11 +43,8 @@ export class LoginPageComponent {
     this.authService.login(username, password).subscribe({
       next: () => {
         this.errorService.clearError();
-        this.isLoggedIn.set(true);
-        // Navigate after 2 seconds to allow popup to display
-        setTimeout(() => {
-          this.router.navigateByUrl('/products');
-        }, 2000);
+        this.toastService.success('Welcome back!');
+        this.router.navigateByUrl('/products');
       },
       error: (err) => {
         this.errorService.setError(err.message || 'Login failed. Please try again.');

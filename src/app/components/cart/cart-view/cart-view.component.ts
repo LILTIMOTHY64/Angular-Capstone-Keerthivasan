@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CartService } from '../../../services/cart.service';
+import { ToastService } from '../../../services/toast.service';
 import { CartRowComponent } from '../cart-row/cart-row.component';
 import { CartAction } from '../../../models/cart.model';
 
@@ -19,6 +20,7 @@ import { CartAction } from '../../../models/cart.model';
 })
 export class CartViewComponent {
   protected readonly cartService = inject(CartService);
+  private readonly toastService = inject(ToastService);
 
   // Confirmation states for destructive actions
   protected readonly clearConfirm = signal(false);
@@ -35,6 +37,7 @@ export class CartViewComponent {
       this.cartService.decrementItem(productId);
     } else if (action === 'remove') {
       this.cartService.removeItem(productId);
+      this.toastService.success('Item removed from cart.');
       this.removeConfirm.set(null);
     }
   }
@@ -67,6 +70,7 @@ export class CartViewComponent {
   // Clear entire cart
   protected clearCart(): void {
     this.cartService.clearCart();
+    this.toastService.success('Cart cleared.');
     this.clearConfirm.set(false);
   }
 }

@@ -11,47 +11,8 @@
   <app-error-message />
   <app-loading-spinner />
 
-  <!-- Success message with countdown spinner before redirect -->
-  @if (deleted()) {
-    <div
-      class="bg-white border rounded-lg p-8 shadow-lg text-center"
-      style="border-color: var(--flopkart-border)"
-    >
-      <div class="mb-4">
-        <svg
-          class="mx-auto h-16 w-16 text-green-500"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-      </div>
-      <h2
-        class="text-2xl font-bold mb-2"
-        style="color: var(--flopkart-dark)"
-        i18n="@@productDeletedSuccess"
-      >
-        Product deleted successfully!
-      </h2>
-      <p class="mb-6" style="color: var(--color-text-light)" i18n="@@redirectingToProducts">
-        Redirecting to products list...
-      </p>
-      <div class="flex justify-center">
-        <div
-          class="animate-spin rounded-full h-8 w-8 border-b-2"
-          style="border-color: var(--flopkart-blue)"
-        ></div>
-      </div>
-    </div>
-  } @else {
-    <!-- Product detail card (image + info + actions) -->
-    @if (product(); as p) {
+  <!-- Product detail card (image + info + actions) -->
+  @if (product(); as p) {
       <div class="bg-white rounded-2xl shadow-lg overflow-hidden md:flex gap-8">
         <!-- Product image -->
         <img
@@ -69,11 +30,11 @@
           <!-- Rating display with dynamically filled stars -->
           <div class="flex items-center gap-3 mb-4">
             <div class="flex gap-0.5">
-              @for (i of [1, 2, 3, 4, 5]; track i) {
+              @for (starIndex of [1, 2, 3, 4, 5]; track starIndex) {
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="w-5 h-5"
-                  [style.fill]="i <= Math.round(p.rating.rate) ? '#FCD34D' : '#E5E7EB'"
+                  [style.fill]="starIndex <= Math.round(p.rating.rate) ? '#FCD34D' : '#E5E7EB'"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                   stroke-width="1"
@@ -101,7 +62,7 @@
             @if (authService.isOwner()) {
               <div class="flex gap-3">
                 <a
-                  [routerLink]="['/manage-product', p.id]"
+                  [routerLink]="['/products', p.id, 'edit']"
                   class="px-6 py-3 rounded-lg font-semibold text-gray-900"
                   style="background-color: var(--flopkart-yellow)"
                   i18n="@@editProduct"
@@ -117,8 +78,8 @@
                   Delete Product
                 </button>
               </div>
-            } @else if (authService.isBuyer()) {
-              <!-- Add to cart button or quantity controls -->
+            } @else {
+              <!-- Add to cart / quantity controls for buyers and guests alike -->
               @if (quantity() === 0) {
                 <button
                   (click)="onCartAction('add')"
@@ -174,41 +135,6 @@
                   </button>
                 </div>
               }
-            } @else {
-              <!-- Disabled Add to Cart button with styled login warning for logged out users -->
-              <div class="flex flex-col gap-2">
-                <button
-                  disabled
-                  class="text-white font-semibold px-6 py-3 rounded-lg transition-all opacity-50 cursor-not-allowed"
-                  style="background-color: var(--flopkart-grey)"
-                  [attr.aria-label]="
-                    'Add to cart disabled for ' + p.title + '. Please log in to add items to cart.'
-                  "
-                  i18n="@@addToCart"
-                >
-                  Add to Cart
-                </button>
-                <div
-                  role="alert"
-                  class="bg-blue-100 border border-blue-300 text-blue-700 px-3 py-2 rounded text-sm font-medium flex items-center gap-2"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-4 h-4 flex-shrink-0"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="16" x2="12" y2="12" />
-                    <line x1="12" y1="8" x2="12.01" y2="8" />
-                  </svg>
-                  <span i18n="@@loginToAddCart">Log in to add items to cart</span>
-                </div>
-              </div>
             }
           </div>
           <!-- Admin actions moved above to replace cart controls for owners -->
@@ -264,5 +190,4 @@
         </div>
       </div>
     }
-  }
 </main>

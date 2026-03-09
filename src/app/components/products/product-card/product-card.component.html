@@ -36,11 +36,11 @@
     <!-- Rating display with dynamically filled stars -->
     <div class="flex items-center gap-2 mb-3">
       <div class="flex gap-0.5">
-        @for (i of [1, 2, 3, 4, 5]; track i) {
+        @for (starIndex of [1, 2, 3, 4, 5]; track starIndex) {
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="w-4 h-4"
-            [style.fill]="i <= Math.round(product.rating.rate) ? '#FCD34D' : '#E5E7EB'"
+            [style.fill]="starIndex <= Math.round(product.rating.rate) ? '#FCD34D' : '#E5E7EB'"
             viewBox="0 0 24 24"
             stroke="currentColor"
             stroke-width="1"
@@ -63,7 +63,7 @@
       @if (authService.isOwner()) {
         <div class="flex gap-2 w-full">
           <a
-            [routerLink]="['/manage-product', product.id]"
+            [routerLink]="['/products', product.id, 'edit']"
             class="flex-1 text-sm font-semibold py-3 px-4 rounded-lg text-black transition-all duration-200 hover:opacity-90 text-center"
             style="background-color: var(--flopkart-yellow)"
             i18n="@@editProduct"
@@ -79,7 +79,7 @@
             Delete
           </button>
         </div>
-      } @else if (authService.isBuyer()) {
+      } @else {
         @if (quantity === 0) {
           <!-- Add to Cart button when not in cart -->
           <button
@@ -143,28 +143,6 @@
             </button>
           </div>
         }
-      } @else {
-        <!-- Disabled Add to Cart button with login warning for logged out users -->
-        <div class="flex-1 flex flex-col gap-1">
-          <button
-            disabled
-            class="flex-1 text-sm font-semibold py-3 px-4 rounded-lg text-white transition-all duration-200 opacity-50 cursor-not-allowed"
-            style="background-color: var(--flopkart-grey)"
-            [attr.aria-label]="
-              'Add to cart disabled. ' + product.title + '. Please log in to add items to cart.'
-            "
-            i18n="@@addToCart"
-          >
-            Add to Cart
-          </button>
-          <p
-            class="text-xs text-center"
-            style="color: var(--flopkart-blue); font-weight: 500"
-            i18n="@@loginToAddCart"
-          >
-            Log in to add items
-          </p>
-        </div>
       }
     </div>
   </div>

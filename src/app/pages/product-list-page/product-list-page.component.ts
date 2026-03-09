@@ -18,6 +18,7 @@ import { ErrorMessageComponent } from '../../shared/error-message/error-message.
 import { Product } from '../../models/product.model';
 import { CartAction } from '../../models/cart.model';
 import { Router } from '@angular/router';
+import { ToastService } from '../../services/toast.service';
 
 /**
  * Browse and filter products with pagination
@@ -38,6 +39,7 @@ export class ProductListPageComponent implements OnInit {
   private readonly loadingService = inject(LoadingService);
   private readonly errorService = inject(ErrorService);
   private readonly cartService = inject(CartService);
+  private readonly toastService = inject(ToastService);
 
   // State signals
   protected readonly allProducts = signal<Product[]>([]);
@@ -51,24 +53,23 @@ export class ProductListPageComponent implements OnInit {
 
   // Map of productId -> quantity, computed once for the page
   protected readonly quantities = computed(() => {
-    const m = new Map<number, number>();
-    this.cartItems().forEach((i) => m.set(i.productId, i.quantity));
-    return m;
+    const quantityMap = new Map<number, number>();
+    this.cartItems().forEach((cartItem) => quantityMap.set(cartItem.productId, cartItem.quantity));
+    return quantityMap;
   });
 
   // Computed: filter by selected category
   protected readonly products = computed(() => {
-    const cat = this.selectedCategory();
-    return cat ? this.allProducts().filter((p) => p.category === cat) : this.allProducts();
+    const selectedCategory = this.selectedCategory();
+    return selectedCategory
+      ? this.allProducts().filter((product) => product.category === selectedCategory)
+      : this.allProducts();
   });
 
   // Computed: total pages available
   protected readonly totalPages = computed(() => {
     return Math.ceil(this.products().length / this.itemsPerPage());
   });
-
-  // Transient toast message (used when guard redirects an already-signed-in user)
-  protected readonly toastMessage = signal<string | null>(null);
 
   // Computed: slice products for current page
   protected readonly paginatedProducts = computed(() => {
@@ -84,15 +85,14 @@ export class ProductListPageComponent implements OnInit {
     // the guard appends ?alreadySignedIn=1 — show a transient info toast.
     const already = this.route.snapshot.queryParamMap.get('alreadySignedIn');
     if (already === '1') {
-      this.toastMessage.set('You are already signed in.');
-      setTimeout(() => this.toastMessage.set(null), 3000);
+      this.toastService.info('You are already signed in.');
     }
     // Fetch all products
     this.apiService.getProducts().subscribe({
       next: (data) => {
         this.allProducts.set(data);
-        const cats = [...new Set(data.map((p) => p.category))];
-        this.categories.set(cats);
+        const uniqueCategories = [...new Set(data.map((product) => product.category))];
+        this.categories.set(uniqueCategories);
         this.loadingService.hide();
       },
       error: () => {
@@ -103,15 +103,15 @@ export class ProductListPageComponent implements OnInit {
   }
 
   // Select category filter
-  protected selectCategory(cat: string): void {
-    this.selectedCategory.set(cat);
+  protected selectCategory(category: string): void {
+    this.selectedCategory.set(category);
     this.currentPage.set(1);
   }
 
   // Go to next page
   protected nextPage(): void {
     if (this.currentPage() < this.totalPages()) {
-      this.currentPage.update((p) => p + 1);
+      this.currentPage.update((page) => page + 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
@@ -119,7 +119,7 @@ export class ProductListPageComponent implements OnInit {
   // Go to previous page
   protected previousPage(): void {
     if (this.currentPage() > 1) {
-      this.currentPage.update((p) => p - 1);
+      this.currentPage.update((page) => page - 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
@@ -151,9 +151,6 @@ export class ProductListPageComponent implements OnInit {
   // Delete confirmation state (product id being confirmed for deletion)
   protected readonly deleteConfirm = signal<number | null>(null);
 
-  // Success indicator for recent delete (product id)
-  protected readonly deletedSuccess = signal<number | null>(null);
-
   // Open confirmation modal for deleting a product
   protected confirmDelete(productId: number): void {
     this.deleteConfirm.set(productId);
@@ -166,20 +163,17 @@ export class ProductListPageComponent implements OnInit {
 
   // Called when the user confirms deletion in the modal
   protected performDelete(): void {
-    const id = this.deleteConfirm();
-    if (id === null) return;
+    const productId = this.deleteConfirm();
+    if (productId === null) return;
     this.deleteConfirm.set(null);
     this.loadingService.show();
-    this.apiService.deleteProduct(id).subscribe({
+    this.apiService.deleteProduct(productId).subscribe({
       next: () => {
         this.loadingService.hide();
-        // Do not remove the item from the list per spec — just show success
-        this.deletedSuccess.set(id);
-        // Clear success after 2s
-        setTimeout(() => this.deletedSuccess.set(null), 2000);
+        this.toastService.success('Product deleted successfully.');
       },
       error: () => {
-        this.errorService.setError('Failed to delete product.');
+        this.toastService.error('Failed to delete product. Please try again.');
         this.loadingService.hide();
       },
     });
@@ -187,6 +181,6 @@ export class ProductListPageComponent implements OnInit {
 
   // Owner actions
   protected editProduct(productId: number): void {
-    this.router.navigate(['/manage-product', productId]);
+    this.router.navigate(['/products', productId, 'edit']);
   }
 }

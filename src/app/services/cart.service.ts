@@ -51,7 +51,7 @@ export class CartService {
 
   // Get quantity for specific product (sync method for computed signals)
   getQuantity(productId: number): number {
-    return this.cartItemsSubject.value.find((i) => i.productId === productId)?.quantity ?? 0;
+    return this.cartItemsSubject.value.find((cartItem) => cartItem.productId === productId)?.quantity ?? 0;
   }
 
   // Get all cart items synchronously
@@ -62,11 +62,11 @@ export class CartService {
   // Add new item or increment quantity if already in cart
   addItem(item: Omit<CartItem, 'quantity'>): void {
     const items = this.cartItemsSubject.value;
-    const existing = items.find((i) => i.productId === item.productId);
+    const existing = items.find((cartItem) => cartItem.productId === item.productId);
 
     if (existing) {
-      const updated = items.map((i) =>
-        i.productId === item.productId ? { ...i, quantity: i.quantity + 1 } : i,
+      const updated = items.map((cartItem) =>
+        cartItem.productId === item.productId ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem,
       );
       this.cartItemsSubject.next(updated);
     } else {
@@ -95,16 +95,18 @@ export class CartService {
     const items = this.cartItemsSubject.value;
 
     if (action === 'remove') {
-      this.cartItemsSubject.next(items.filter((i) => i.productId !== productId));
+      this.cartItemsSubject.next(items.filter((cartItem) => cartItem.productId !== productId));
     } else {
-      const existing = items.find((i) => i.productId === productId);
+      const existing = items.find((cartItem) => cartItem.productId === productId);
       if (action === 'decrement' && (!existing || existing.quantity <= 1)) {
-        this.cartItemsSubject.next(items.filter((i) => i.productId !== productId));
+        this.cartItemsSubject.next(items.filter((cartItem) => cartItem.productId !== productId));
       } else {
-        const delta = action === 'increment' ? 1 : -1;
+        const quantityDelta = action === 'increment' ? 1 : -1;
         this.cartItemsSubject.next(
-          items.map((i) =>
-            i.productId === productId ? { ...i, quantity: i.quantity + delta } : i,
+          items.map((cartItem) =>
+            cartItem.productId === productId
+              ? { ...cartItem, quantity: cartItem.quantity + quantityDelta }
+              : cartItem,
           ),
         );
       }

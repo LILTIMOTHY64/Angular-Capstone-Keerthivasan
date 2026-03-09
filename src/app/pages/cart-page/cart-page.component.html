@@ -37,8 +37,8 @@
         (click)="openConstructionModal()"
         class="w-full text-white font-bold py-3 sm:py-4 rounded-lg transition-all hover:shadow-lg mt-2 text-sm sm:text-base tracking-wide"
         style="background-color: var(--flopkart-blue)"
-        onmouseover="if (!this.disabled) this.style.backgroundColor = 'var(--color-hover)';"
-        onmouseout="if (!this.disabled) this.style.backgroundColor = 'var(--flopkart-blue)';"
+        onmouseover="this.style.backgroundColor = 'var(--color-hover)'"
+        onmouseout="this.style.backgroundColor = 'var(--flopkart-blue)'"
         i18n="@@btnCheckout"
       >
         Checkout
@@ -68,6 +68,7 @@
       style="background-color: rgba(0, 0, 0, 0.5)"
       (click)="closeConstructionModal()"
       (keydown.enter)="closeConstructionModal()"
+      (window:keydown.escape)="closeConstructionModal()"
     >
       <div
         class="bg-white rounded-lg shadow-2xl max-w-md w-full p-8 animate-scale text-center"

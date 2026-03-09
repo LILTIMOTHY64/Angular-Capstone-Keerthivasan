@@ -1,8 +1,8 @@
-<li class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 py-4 sm:py-6 bg-white">
+<li class="flex items-center gap-3 sm:gap-6 py-4 sm:py-6 bg-white">
   <img
     [src]="item.image"
     [alt]="item.title"
-    class="w-20 sm:w-24 h-20 sm:h-24 object-contain rounded-lg p-2 self-start"
+    class="w-20 sm:w-24 h-20 sm:h-24 object-contain rounded-lg p-2 flex-shrink-0"
     style="background-color: var(--flopkart-light)"
   />
   <div class="flex-1 min-w-0">
@@ -16,39 +16,53 @@
       {{ item.price | currency }}
     </p>
   </div>
-  <div class="flex flex-row justify-between sm:flex-col sm:items-center sm:gap-2">
-    <div class="flex items-center gap-2 sm:gap-3 bg-gray-50 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2">
-      <button
-        class="w-7 sm:w-8 h-7 sm:h-8 rounded-full flex items-center justify-center font-bold text-white text-sm transition-all hover:scale-110"
-        style="background-color: var(--flopkart-grey)"
-        aria-label="Decrease quantity"
-        (click)="decrement.emit()"
-      >
-        −
-      </button>
-      <span
-        class="w-6 sm:w-8 text-center font-bold text-base sm:text-lg"
-        style="color: var(--flopkart-dark)"
-        aria-live="polite"
-        >{{ item.quantity }}</span
-      >
-      <button
-        class="w-7 sm:w-8 h-7 sm:h-8 rounded-full flex items-center justify-center font-bold text-white text-sm transition-all hover:scale-110"
-        style="background-color: var(--flopkart-blue)"
-        aria-label="Increase quantity"
-        (click)="increment.emit()"
-      >
-        +
-      </button>
-    </div>
+  <!-- Quantity controls -->
+  <div class="flex items-center gap-2 sm:gap-3 bg-gray-50 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 flex-shrink-0">
     <button
-      class="text-xs sm:text-sm font-medium hover:underline transition-all"
-      style="color: var(--flopkart-red)"
-      aria-label="Remove item"
-      (click)="confirmRemove.emit()"
-      i18n="@@remove"
+      class="w-7 sm:w-8 h-7 sm:h-8 rounded-full flex items-center justify-center font-bold text-white text-sm transition-all hover:scale-110"
+      style="background-color: var(--flopkart-grey)"
+      aria-label="Decrease quantity"
+      (click)="decrement.emit()"
     >
-      Remove
+      −
+    </button>
+    <span
+      class="w-6 sm:w-8 text-center font-bold text-base sm:text-lg"
+      style="color: var(--flopkart-dark)"
+      aria-live="polite"
+      >{{ item.quantity }}</span
+    >
+    <button
+      class="w-7 sm:w-8 h-7 sm:h-8 rounded-full flex items-center justify-center font-bold text-white text-sm transition-all hover:scale-110"
+      style="background-color: var(--flopkart-blue)"
+      aria-label="Increase quantity"
+      (click)="increment.emit()"
+    >
+      +
     </button>
   </div>
+  <!-- Trash icon remove button -->
+  <button
+    class="flex-shrink-0 p-1.5 rounded-md transition-colors hover:bg-red-50"
+    style="color: var(--flopkart-red)"
+    [attr.aria-label]="'Remove ' + item.title + ' from cart'"
+    (click)="confirmRemove.emit()"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="w-4 h-4 sm:w-5 sm:h-5"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <polyline points="3 6 5 6 21 6" />
+      <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+      <path d="M10 11v6M14 11v6" />
+      <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+    </svg>
+  </button>
 </li>

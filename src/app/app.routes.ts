@@ -35,7 +35,7 @@ export const routes: Routes = [
   {
     // Protected route - only accessible to owners
     // Used for adding new products
-    path: 'add-product',
+    path: 'products/add',
     canActivate: [ownerGuard],
     component: ProductManagePageComponent,
     data: { title: 'Add Product' },
@@ -43,7 +43,7 @@ export const routes: Routes = [
   {
     // Protected route - only accessible to owners
     // Used for editing existing products
-    path: 'manage-product/:id',
+    path: 'products/:id/edit',
     canActivate: [ownerGuard],
     component: ProductManagePageComponent,
     data: { title: 'Edit Product' },
@@ -52,7 +52,6 @@ export const routes: Routes = [
     // Protected route - only accessible to buyers
     // Displays user's shopping cart
     path: 'cart',
-    canActivate: [buyerGuard],
     component: CartPageComponent,
     data: { title: 'Your Cart' },
   },
