@@ -1,0 +1,42 @@
+/* Footer Texture */
+.footer-textured {
+  position: relative;
+  background-color: var(--flopkart-light);
+}
+
+.footer-textured::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(
+      circle at 20% 50%,
+      transparent 0%,
+      transparent 50%,
+      rgba(37, 99, 235, 0.04) 50%,
+      rgba(37, 99, 235, 0.04) 100%
+    ),
+    radial-gradient(
+      circle at 80% 50%,
+      transparent 0%,
+      transparent 50%,
+      rgba(37, 99, 235, 0.04) 50%,
+      rgba(37, 99, 235, 0.04) 100%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 50px,
+      rgba(37, 99, 235, 0.03) 50px,
+      rgba(37, 99, 235, 0.03) 51px
+    );
+  background-size:
+    200px 200px,
+    200px 200px,
+    100% 100%;
+  pointer-events: none;
+  opacity: 0.8;
+}

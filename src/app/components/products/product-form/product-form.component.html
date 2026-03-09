@@ -1,0 +1,127 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="space-y-4">
+  <!-- Title field with validation (minLength: 2) -->
+  <div>
+    <label for="title" class="block text-sm font-medium text-gray-700 mb-1" i18n="@@labelTitle"
+      >Title</label
+    >
+    <input
+      id="title"
+      type="text"
+      formControlName="title"
+      class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2"
+      [style.border-color]="
+        form.controls.title.invalid && form.controls.title.touched
+          ? 'var(--flopkart-red)'
+          : 'var(--flopkart-border)'
+      "
+      [style.focus.ring-color]="'var(--flopkart-blue)'"
+    />
+    @if (form.controls.title.invalid && form.controls.title.touched) {
+      <p class="text-red-500 text-xs mt-1" role="alert" i18n="@@titleError">
+        Title is required (min 2 characters).
+      </p>
+    }
+  </div>
+  <!-- Description field (required) -->
+  <div>
+    <label
+      for="description"
+      class="block text-sm font-medium text-gray-700 mb-1"
+      i18n="@@labelDescription"
+      >Description</label
+    >
+    <textarea
+      id="description"
+      formControlName="description"
+      rows="3"
+      class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2"
+      [style.border-color]="
+        form.controls.description.invalid && form.controls.description.touched
+          ? 'var(--flopkart-red)'
+          : 'var(--flopkart-border)'
+      "
+      [style.focus.ring-color]="'var(--flopkart-blue)'"
+    ></textarea>
+  </div>
+  <!-- Price and Category fields (two columns) -->
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <label for="price" class="block text-sm font-medium text-gray-700 mb-1" i18n="@@labelPrice"
+        >Price ($)</label
+      >
+      <input
+        id="price"
+        type="number"
+        formControlName="price"
+        min="0.01"
+        step="0.01"
+        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2"
+        [style.focus.ring-color]="'var(--flopkart-blue)'"
+      />
+    </div>
+    <div>
+      <label
+        for="category"
+        class="block text-sm font-medium text-gray-700 mb-1"
+        i18n="@@labelCategory"
+        >Category</label
+      >
+      @if (categories && categories.length > 0) {
+        <select
+          id="category"
+          formControlName="category"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2"
+        >
+          <option value="" i18n="@@selectCategory">Choose a category</option>
+          @for (cat of categories; track cat) {
+            <option [value]="cat">{{ cat | titlecase }}</option>
+          }
+        </select>
+      } @else {
+        <input
+          id="category"
+          type="text"
+          formControlName="category"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2"
+          [style.focus.ring-color]="'var(--flopkart-blue)'"
+        />
+      }
+    </div>
+  </div>
+  <!-- Image URL field with validation (must be valid http(s) URL) -->
+  <div>
+    <label for="image" class="block text-sm font-medium text-gray-700 mb-1" i18n="@@labelImageUrl"
+      >Image URL</label
+    >
+    <input
+      id="image"
+      type="url"
+      formControlName="image"
+      placeholder="https://..."
+      class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2"
+      [style.border-color]="
+        form.controls.image.invalid && form.controls.image.touched
+          ? 'var(--flopkart-red)'
+          : 'var(--flopkart-border)'
+      "
+      [style.focus.ring-color]="'var(--flopkart-blue)'"
+    />
+    @if (form.controls.image.invalid && form.controls.image.touched) {
+      <p class="text-red-500 text-xs mt-1" role="alert" i18n="@@imageError">
+        A valid image URL starting with http(s):// is required.
+      </p>
+    }
+  </div>
+  <!-- Submit button: disabled when form is invalid -->
+  <button
+    type="submit"
+    [disabled]="form.invalid"
+    class="w-full text-white font-semibold py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+    style="background-color: var(--flopkart-blue)"
+    onmouseover="if (!this.disabled) this.style.backgroundColor = 'var(--color-hover)';"
+    onmouseout="if (!this.disabled) this.style.backgroundColor = 'var(--flopkart-blue)';"
+    i18n="@@btnSave"
+  >
+    Save Product
+  </button>
+</form>

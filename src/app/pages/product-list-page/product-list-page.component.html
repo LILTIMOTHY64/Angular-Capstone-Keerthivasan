@@ -1,0 +1,257 @@
+<main class="container mx-auto px-4 py-12 max-w-7xl">
+  <!-- Page header with title and category filter -->
+  <div class="flex items-center justify-between mb-10 flex-wrap gap-4">
+    <h1
+      class="text-3xl font-bold tracking-tight"
+      style="color: var(--flopkart-dark)"
+      i18n="@@productsTitle"
+    >
+      All Products
+    </h1>
+    <!-- Toast shown when redirected from login because user is already signed in -->
+    @if (toastMessage() !== null) {
+      <div
+        class="fixed top-4 right-4 z-50 bg-white border rounded-lg p-4 shadow-lg"
+        style="border-color: var(--flopkart-border)"
+      >
+        <div class="flex items-center gap-3">
+          <svg
+            class="w-6 h-6 text-blue-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z"
+            />
+          </svg>
+          <div>
+            <div class="font-semibold" style="color: var(--flopkart-dark)">
+              {{ toastMessage() }}
+            </div>
+            <div class="text-sm" style="color: var(--color-text-light)">
+              You were redirected to the products page.
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+    <!-- Category filter dropdown (shown when categories loaded) -->
+    @if (categories().length > 0) {
+      <div class="relative">
+        <select
+          [value]="selectedCategory()"
+          (change)="selectCategory($any($event.target).value)"
+          class="dropdown-select"
+        >
+          <option value="" i18n="@@allCategories">All Categories</option>
+          @for (cat of categories(); track cat) {
+            <option [value]="cat" class="capitalize">{{ cat }}</option>
+          }
+        </select>
+        <svg
+          class="dropdown-icon"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5 7.5L10 12.5L15 7.5"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+    }
+  </div>
+  <!-- Global error and loading indicators -->
+  <app-error-message />
+  <app-loading-spinner />
+  <!-- Products grid (desktop shows all, mobile paginated) -->
+  @if (products().length > 0) {
+    <!-- Desktop view: 3-4 columns showing all filtered products -->
+    <ul class="hidden lg:grid lg:grid-cols-3 xl:grid-cols-4 gap-8 list-none p-0">
+      @for (product of products(); track product.id) {
+        <li>
+          <app-product-card
+            [product]="product"
+            [quantity]="quantities().get(product.id) ?? 0"
+            (add)="onCartAction('add', product)"
+            (increment)="onCartAction('increment', product)"
+            (decrement)="onCartAction('decrement', product)"
+            (edit)="editProduct(product.id)"
+            (remove)="confirmDelete(product.id)"
+          />
+        </li>
+      }
+    </ul>
+
+    <!-- Mobile view: 1-2 columns showing paginated products (6 per page) -->
+    <ul class="grid lg:hidden grid-cols-1 sm:grid-cols-2 gap-8 list-none p-0">
+      @for (product of paginatedProducts(); track product.id) {
+        <li>
+          <app-product-card
+            [product]="product"
+            [quantity]="quantities().get(product.id) ?? 0"
+            (add)="onCartAction('add', product)"
+            (increment)="onCartAction('increment', product)"
+            (decrement)="onCartAction('decrement', product)"
+            (edit)="editProduct(product.id)"
+            (remove)="confirmDelete(product.id)"
+          />
+        </li>
+      }
+    </ul>
+
+    <!-- Pagination: Previous/Next buttons with page numbers (mobile only) -->
+    <div class="flex lg:hidden items-center justify-center gap-2 mt-12">
+      <button
+        (click)="previousPage()"
+        [disabled]="currentPage() === 1"
+        class="w-10 h-10 flex items-center justify-center rounded-lg font-semibold transition-all"
+        style="background-color: var(--flopkart-border); color: var(--color-text)"
+        [style.opacity]="currentPage() === 1 ? '0.5' : '1'"
+        [style.cursor]="currentPage() === 1 ? 'not-allowed' : 'pointer'"
+        title="Previous page"
+        aria-label="Previous page"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+
+      <!-- Page number buttons (numbered 1 to totalPages) -->
+      <div class="flex gap-2">
+        @for (page of [].constructor(totalPages()); track $index) {
+          <button
+            (click)="goToPage($index + 1)"
+            [disabled]="currentPage() === $index + 1"
+            class="w-10 h-10 rounded-lg font-semibold transition-all text-sm"
+            [style.background-color]="
+              currentPage() === $index + 1 ? 'var(--flopkart-blue)' : 'var(--flopkart-light)'
+            "
+            [style.color]="currentPage() === $index + 1 ? 'white' : 'var(--color-text)'"
+            [style.cursor]="currentPage() === $index + 1 ? 'default' : 'pointer'"
+          >
+            {{ $index + 1 }}
+          </button>
+        }
+      </div>
+
+      <button
+        (click)="nextPage()"
+        [disabled]="currentPage() === totalPages()"
+        class="w-10 h-10 flex items-center justify-center rounded-lg font-semibold transition-all"
+        style="background-color: var(--flopkart-border); color: var(--color-text)"
+        [style.opacity]="currentPage() === totalPages() ? '0.5' : '1'"
+        [style.cursor]="currentPage() === totalPages() ? 'not-allowed' : 'pointer'"
+        title="Next page"
+        aria-label="Next page"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Current page indicator (mobile only) -->
+    <p
+      class="flex lg:hidden text-center mt-4 text-sm justify-center"
+      style="color: var(--color-text-light)"
+      i18n="@@pageInfo"
+    >
+      Page {{ currentPage() }} of {{ totalPages() }}
+    </p>
+  } @else {
+    <!-- Empty state: shown when no products match filters -->
+    <p class="text-center py-20 text-lg" style="color: var(--color-text-light)" i18n="@@noProducts">
+      No products found.
+    </p>
+  }
+
+  <!-- Delete success message (transient) -->
+  @if (deletedSuccess() !== null) {
+    <div
+      class="fixed top-4 right-4 z-50 bg-white border rounded-lg p-4 shadow-lg"
+      style="border-color: var(--flopkart-border)"
+    >
+      <div class="flex items-center gap-3">
+        <svg class="w-6 h-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" />
+        </svg>
+        <div>
+          <div class="font-semibold" style="color: var(--flopkart-dark)">Product deleted</div>
+          <div class="text-sm" style="color: var(--color-text-light)">
+            The product was deleted successfully.
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Delete confirmation modal -->
+  @if (deleteConfirm() !== null) {
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style="background-color: rgba(0, 0, 0, 0.5)"
+      (click)="cancelDelete()"
+      (window:keydown.escape)="cancelDelete()"
+    >
+      <div
+        class="bg-white rounded-lg shadow-2xl max-w-md w-full p-6 animate-scale"
+        (click)="$event.stopPropagation()"
+      >
+        <h2
+          class="text-xl font-bold mb-3"
+          style="color: var(--flopkart-dark)"
+          i18n="@@confirmDeleteTitle"
+        >
+          Delete Product?
+        </h2>
+        <p class="mb-6" style="color: var(--color-text)" i18n="@@confirmDeleteMessage">
+          Are you sure you want to delete this product? This action cannot be undone.
+        </p>
+        <div class="flex gap-3 justify-end">
+          <button
+            (click)="cancelDelete()"
+            class="px-5 py-2.5 rounded-lg font-semibold transition-all hover:bg-gray-100"
+            style="color: var(--flopkart-grey); border: 1px solid var(--flopkart-border)"
+            i18n="@@cancel"
+          >
+            Cancel
+          </button>
+          <button
+            (click)="performDelete()"
+            class="px-5 py-2.5 rounded-lg font-semibold text-white transition-all hover:opacity-90"
+            style="background-color: var(--flopkart-red)"
+            i18n="@@confirmDelete"
+          >
+            Delete Product
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</main>

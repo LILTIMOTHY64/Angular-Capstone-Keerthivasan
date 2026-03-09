@@ -1,0 +1,99 @@
+/* ── Modern Dropdown Styling ─────────────────────────────────────── */
+.dropdown-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  min-width: 280px;
+  padding: 14px 48px 14px 20px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-text);
+
+  background-color: var(--flopkart-white);
+  border: 2px solid var(--flopkart-blue);
+  border-radius: 12px;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  text-transform: capitalize;
+}
+
+.dropdown-select:hover {
+  border-color: var(--color-hover);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.12);
+}
+
+.dropdown-select:focus {
+  outline: none;
+  border-color: var(--flopkart-blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.dropdown-select option {
+  padding: 12px;
+  font-size: 15px;
+  background-color: var(--flopkart-white);
+  color: var(--color-text);
+}
+
+.dropdown-select option:checked {
+  background-color: var(--flopkart-light);
+  color: var(--flopkart-blue);
+  font-weight: 500;
+}
+
+/* Custom dropdown icon */
+.dropdown-icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--flopkart-blue);
+  transition: transform 0.2s ease;
+}
+
+.dropdown-select:focus ~ .dropdown-icon {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+/* Relative wrapper for icon positioning */
+label > div.relative {
+  position: relative;
+}
+
+/* ── Pagination Styling ──────────────────────────────────────────– */
+button[i18n*='Page'],
+button[i18n*='previousPage'],
+button[i18n*='nextPage'] {
+  transition: all 0.2s ease;
+}
+
+button[i18n*='previousPage']:not(:disabled):hover,
+button[i18n*='nextPage']:not(:disabled):hover,
+button[i18n*='Page']:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+}
+
+button[i18n*='previousPage']:not(:disabled):active,
+button[i18n*='nextPage']:not(:disabled):active,
+button[i18n*='Page']:not(:disabled):active {
+  transform: translateY(0);
+}
+
+/* Responsive pagination buttons */
+@media (max-width: 640px) {
+  button[i18n*='previousPage'],
+  button[i18n*='nextPage'] {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  .flex.flex-wrap.gap-2 {
+    max-width: 100%;
+  }
+}

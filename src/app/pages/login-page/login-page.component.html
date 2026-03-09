@@ -1,0 +1,315 @@
+<main class="min-h-screen flex" style="background-color: var(--flopkart-light)">
+  <!-- Login success popup -->
+  @if (isLoggedIn()) {
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div
+        class="bg-white rounded-2xl shadow-2xl p-12 max-w-md w-full mx-4 text-center animate-in fade-in zoom-in duration-300"
+      >
+        <!-- Success checkmark icon -->
+        <div class="flex justify-center mb-6">
+          <svg
+            class="w-20 h-20 text-green-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="1.5" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4"
+            />
+          </svg>
+        </div>
+        <!-- Success message -->
+        <h2
+          class="text-2xl font-bold mb-2"
+          style="color: var(--flopkart-dark)"
+          i18n="@@loggedInTitle"
+        >
+          Welcome!
+        </h2>
+        <p class="text-lg font-semibold mb-4" style="color: var(--color-text)">
+          {{ displayName() }}
+        </p>
+        <p class="text-sm mb-8" style="color: var(--color-text-light)" i18n="@@redirectingMessage">
+          Redirecting to products list...
+        </p>
+        <!-- Loading spinner -->
+        <div class="flex justify-center gap-2">
+          <div
+            class="w-2 h-2 rounded-full animate-bounce"
+            style="background-color: var(--flopkart-blue); animation-delay: 0ms"
+          ></div>
+          <div
+            class="w-2 h-2 rounded-full animate-bounce"
+            style="background-color: var(--flopkart-blue); animation-delay: 150ms"
+          ></div>
+          <div
+            class="w-2 h-2 rounded-full animate-bounce"
+            style="background-color: var(--flopkart-blue); animation-delay: 300ms"
+          ></div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Left column: Branding and feature highlights (desktop only) -->
+  <div
+    class="hidden lg:flex lg:w-1/2 relative overflow-hidden"
+    style="background: linear-gradient(135deg, var(--flopkart-blue) 0%, var(--color-hover) 100%)"
+  >
+    <div class="w-full flex flex-col justify-center items-center text-white p-16">
+      <img src="assets/icons/flopkart-logo.png" alt="" class="w-32 h-32 mb-6 drop-shadow-2xl" />
+      <h1 class="text-5xl font-bold mb-4 text-center" i18n="@@welcomeTitle">Welcome to Flopkart</h1>
+      <p class="text-xl text-center text-blue-100 max-w-md mb-8" i18n="@@loginWelcome">
+        Your trusted online store for quality products at great prices
+      </p>
+      <!-- Feature highlights -->
+      <div class="grid grid-cols-3 gap-8 mt-8">
+        <div class="text-center">
+          <svg
+            class="w-12 h-12 mx-auto mb-2 text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+            />
+          </svg>
+          <p class="text-sm text-blue-100" i18n="@@featureShop">Shop Products</p>
+        </div>
+        <div class="text-center">
+          <svg
+            class="w-12 h-12 mx-auto mb-2 text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+            />
+          </svg>
+          <p class="text-sm text-blue-100" i18n="@@featureDelivery">Fast Delivery</p>
+        </div>
+        <div class="text-center">
+          <svg
+            class="w-12 h-12 mx-auto mb-2 text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+            />
+          </svg>
+          <p class="text-sm text-blue-100" i18n="@@featurePayment">Secure Payment</p>
+        </div>
+      </div>
+    </div>
+    <!-- Decorative background circles -->
+    <div
+      class="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full transform translate-x-32 -translate-y-32"
+    ></div>
+    <div
+      class="absolute bottom-0 left-0 w-96 h-96 bg-white opacity-10 rounded-full transform -translate-x-48 translate-y-48"
+    ></div>
+  </div>
+
+  <!-- Right column: Login form -->
+  <div class="w-full lg:w-1/2 flex items-center justify-center px-8 py-12">
+    <div class="w-full max-w-md">
+      <!-- Mobile logo (hidden on desktop) -->
+      <div class="lg:hidden flex flex-col items-center mb-8">
+        <img src="assets/icons/flopkart-text.png" alt="Flopkart" class="h-16 w-auto mb-3" />
+      </div>
+
+      <!-- Login form card -->
+      <div
+        class="bg-white rounded-2xl shadow-xl p-8 lg:p-10 border"
+        style="border-color: var(--flopkart-border)"
+      >
+        <h2 class="text-3xl font-bold mb-2" style="color: var(--flopkart-dark)" i18n="@@signIn">
+          Sign In
+        </h2>
+        <p class="mb-6" style="color: var(--color-text-light)" i18n="@@loginSubtitle">
+          Welcome back! Please enter your credentials
+        </p>
+
+        <!-- Error messages from service -->
+        <app-error-message />
+
+        <!-- Reactive form with username and password fields -->
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+          <!-- Username field with validation feedback (minLength: 3) -->
+          <div class="mb-5">
+            <label
+              for="username"
+              class="block text-sm font-semibold mb-2"
+              style="color: var(--color-text)"
+              i18n="@@labelUsername"
+              >Username</label
+            >
+            <input
+              id="username"
+              type="text"
+              formControlName="username"
+              autocomplete="username"
+              class="w-full rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 transition-all"
+              style="border: 2px solid var(--flopkart-border); color: var(--color-text)"
+              [style.border-color]="
+                form.controls.username.invalid && form.controls.username.touched
+                  ? 'var(--flopkart-red)'
+                  : 'var(--flopkart-border)'
+              "
+              aria-describedby="username-error"
+              placeholder="e.g. emilys"
+            />
+            @if (form.controls.username.invalid && form.controls.username.touched) {
+              <p
+                id="username-error"
+                class="text-xs mt-2"
+                style="color: var(--flopkart-red)"
+                role="alert"
+                i18n="@@usernameError"
+              >
+                Username is required (min 3 characters).
+              </p>
+            }
+          </div>
+          <!-- Password field with validation feedback (minLength: 6) -->
+          <div class="mb-6">
+            <label
+              for="password"
+              class="block text-sm font-semibold mb-2"
+              style="color: var(--color-text)"
+              i18n="@@labelPassword"
+              >Password</label
+            >
+            <input
+              id="password"
+              type="password"
+              formControlName="password"
+              autocomplete="current-password"
+              class="w-full rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 transition-all"
+              style="border: 2px solid var(--flopkart-border); color: var(--color-text)"
+              [style.border-color]="
+                form.controls.password.invalid && form.controls.password.touched
+                  ? 'var(--flopkart-red)'
+                  : 'var(--flopkart-border)'
+              "
+              aria-describedby="password-error"
+              placeholder="••••••••"
+            />
+            @if (form.controls.password.invalid && form.controls.password.touched) {
+              <p
+                id="password-error"
+                class="text-xs mt-2"
+                style="color: var(--flopkart-red)"
+                role="alert"
+                i18n="@@passwordError"
+              >
+                Password must be at least 6 characters.
+              </p>
+            }
+          </div>
+          <!-- Submit button: disabled when form is invalid -->
+          <button
+            type="submit"
+            [disabled]="form.invalid"
+            class="w-full text-white font-bold py-4 rounded-lg transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-base tracking-wide"
+            style="background-color: var(--flopkart-blue)"
+            onmouseover="if (!this.disabled) this.style.backgroundColor = 'var(--color-hover)';"
+            onmouseout="if (!this.disabled) this.style.backgroundColor = 'var(--flopkart-blue)';"
+            i18n="@@btnLogin"
+          >
+            Sign In
+          </button>
+        </form>
+
+        <!-- Demo credentials from DummyJSON API (buyer and owner roles with passwords) -->
+        <div
+          class="mt-8 border rounded-lg p-5"
+          style="border-color: var(--flopkart-border); background-color: var(--flopkart-light)"
+        >
+          <p
+            class="font-bold mb-3 text-sm"
+            style="color: var(--color-text)"
+            i18n="@@demoCredentials"
+          >
+            Demo Credentials
+          </p>
+          <div class="space-y-2 text-sm" style="color: var(--color-text)">
+            <div class="flex items-center gap-2">
+              <svg
+                class="w-5 h-5 flex-shrink-0"
+                style="color: var(--flopkart-blue)"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                />
+              </svg>
+              <span class="font-semibold" i18n="@@buyerLabel">Buyer:</span>
+              <code
+                class="bg-white border rounded px-2 py-1 text-xs"
+                style="border-color: var(--flopkart-border)"
+                >emilys</code
+              >
+              <span>/</span>
+              <code
+                class="bg-white border rounded px-2 py-1 text-xs"
+                style="border-color: var(--flopkart-border)"
+                >emilyspass</code
+              >
+            </div>
+            <div class="flex items-center gap-2">
+              <svg
+                class="w-5 h-5 flex-shrink-0"
+                style="color: var(--flopkart-yellow)"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                />
+              </svg>
+              <span class="font-semibold" i18n="@@ownerLabel">Owner:</span>
+              <code
+                class="bg-white border rounded px-2 py-1 text-xs"
+                style="border-color: var(--flopkart-border)"
+                >michaelw</code
+              >
+              <span>/</span>
+              <code
+                class="bg-white border rounded px-2 py-1 text-xs"
+                style="border-color: var(--flopkart-border)"
+                >michaelwpass</code
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

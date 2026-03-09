@@ -1,0 +1,112 @@
+<main class="container mx-auto px-4 py-6 sm:py-12 max-w-4xl">
+  <h1
+    class="text-2xl sm:text-3xl font-bold tracking-tight mb-6 sm:mb-8"
+    style="color: var(--flopkart-dark)"
+    i18n="@@cartTitle"
+  >
+    Your Cart
+  </h1>
+  <!-- Cart items table component -->
+  <app-cart-view />
+  <!-- Cart summary and checkout (shown only when cart has items) -->
+  @if ((cartService.items$ | async)?.length! > 0) {
+    <div
+      class="mt-6 sm:mt-8 bg-white rounded-lg shadow-sm border p-4 sm:p-8 flex flex-col gap-4"
+      style="border-color: var(--flopkart-border)"
+    >
+      <!-- Item count display -->
+      <div
+        class="flex justify-between text-xs sm:text-sm font-medium"
+        style="color: var(--color-text)"
+      >
+        <span i18n="@@cartItems">Items</span>
+        <span>{{ cartService.totalCount$ | async }}</span>
+      </div>
+      <!-- Grand total price display -->
+      <div
+        class="flex justify-between flex-col sm:flex-row sm:items-center gap-2 font-bold text-xl sm:text-2xl border-t pt-4"
+        style="border-color: var(--flopkart-border); color: var(--flopkart-dark)"
+      >
+        <span i18n="@@grandTotal">Grand Total</span>
+        <span style="color: var(--flopkart-blue)">{{
+          cartService.totalPrice$ | async | currency
+        }}</span>
+      </div>
+      <!-- Checkout button: opens construction modal (feature not yet implemented) -->
+      <button
+        (click)="openConstructionModal()"
+        class="w-full text-white font-bold py-3 sm:py-4 rounded-lg transition-all hover:shadow-lg mt-2 text-sm sm:text-base tracking-wide"
+        style="background-color: var(--flopkart-blue)"
+        onmouseover="if (!this.disabled) this.style.backgroundColor = 'var(--color-hover)';"
+        onmouseout="if (!this.disabled) this.style.backgroundColor = 'var(--flopkart-blue)';"
+        i18n="@@btnCheckout"
+      >
+        Checkout
+      </button>
+    </div>
+  } @else {
+    <!-- Empty cart state with link to browse products -->
+    <div class="mt-8 sm:mt-12 text-center py-8 sm:py-12">
+      <a
+        routerLink="/products"
+        class="inline-block text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-lg transition-all hover:shadow-lg text-sm sm:text-base tracking-wide"
+        style="background-color: var(--flopkart-blue)"
+        onmouseover="this.style.backgroundColor = 'var(--color-hover)'"
+        onmouseout="this.style.backgroundColor = 'var(--flopkart-blue)'"
+        onfocus="this.style.backgroundColor = 'var(--color-hover)'"
+        onblur="this.style.backgroundColor = 'var(--flopkart-blue)'"
+        i18n="@@continueShopping"
+        >Continue Shopping</a
+      >
+    </div>
+  }
+
+  <!-- Construction modal: shown when checkout button is clicked (placeholder for future checkout feature) -->
+  @if (showConstructionModal()) {
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style="background-color: rgba(0, 0, 0, 0.5)"
+      (click)="closeConstructionModal()"
+      (keydown.enter)="closeConstructionModal()"
+    >
+      <div
+        class="bg-white rounded-lg shadow-2xl max-w-md w-full p-8 animate-scale text-center"
+        (click)="$event.stopPropagation()"
+        (keydown.enter)="$event.stopPropagation()"
+      >
+        <svg
+          class="w-16 h-16 mx-auto mb-4"
+          style="color: var(--flopkart-yellow)"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M12 9v2m0 4v2m0 6a9 9 0 110-18 9 9 0 010 18z"
+          />
+        </svg>
+        <h2
+          class="text-2xl font-bold mb-3"
+          style="color: var(--flopkart-dark)"
+          i18n="@@constructionTitle"
+        >
+          Coming Soon!
+        </h2>
+        <p class="mb-6" style="color: var(--color-text)" i18n="@@constructionMessage">
+          We're still building the checkout feature. Please check back soon!
+        </p>
+        <button
+          (click)="closeConstructionModal()"
+          class="px-6 py-2.5 rounded-lg font-semibold text-white transition-all hover:opacity-90"
+          style="background-color: var(--flopkart-blue)"
+          i18n="@@okButton"
+        >
+          OK
+        </button>
+      </div>
+    </div>
+  }
+</main>

@@ -1,0 +1,54 @@
+<li class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 py-4 sm:py-6 bg-white">
+  <img
+    [src]="item.image"
+    [alt]="item.title"
+    class="w-20 sm:w-24 h-20 sm:h-24 object-contain rounded-lg p-2 self-start"
+    style="background-color: var(--flopkart-light)"
+  />
+  <div class="flex-1 min-w-0">
+    <p
+      class="font-semibold text-sm sm:text-base mb-1 line-clamp-2"
+      style="color: var(--color-text)"
+    >
+      {{ item.title }}
+    </p>
+    <p class="text-lg sm:text-xl font-bold" style="color: var(--flopkart-blue)">
+      {{ item.price | currency }}
+    </p>
+  </div>
+  <div class="flex flex-row justify-between sm:flex-col sm:items-center sm:gap-2">
+    <div class="flex items-center gap-2 sm:gap-3 bg-gray-50 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2">
+      <button
+        class="w-7 sm:w-8 h-7 sm:h-8 rounded-full flex items-center justify-center font-bold text-white text-sm transition-all hover:scale-110"
+        style="background-color: var(--flopkart-grey)"
+        aria-label="Decrease quantity"
+        (click)="decrement.emit()"
+      >
+        −
+      </button>
+      <span
+        class="w-6 sm:w-8 text-center font-bold text-base sm:text-lg"
+        style="color: var(--flopkart-dark)"
+        aria-live="polite"
+        >{{ item.quantity }}</span
+      >
+      <button
+        class="w-7 sm:w-8 h-7 sm:h-8 rounded-full flex items-center justify-center font-bold text-white text-sm transition-all hover:scale-110"
+        style="background-color: var(--flopkart-blue)"
+        aria-label="Increase quantity"
+        (click)="increment.emit()"
+      >
+        +
+      </button>
+    </div>
+    <button
+      class="text-xs sm:text-sm font-medium hover:underline transition-all"
+      style="color: var(--flopkart-red)"
+      aria-label="Remove item"
+      (click)="confirmRemove.emit()"
+      i18n="@@remove"
+    >
+      Remove
+    </button>
+  </div>
+</li>

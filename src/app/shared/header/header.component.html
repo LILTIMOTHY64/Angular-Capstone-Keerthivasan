@@ -1,0 +1,227 @@
+<header class="border-b header-textured" style="border-color: var(--flopkart-border)">
+  <nav
+    class="container mx-auto flex items-center justify-between px-6 lg:px-8"
+    style="height: 72px; position: relative; z-index: 1"
+  >
+    <!-- Brand logo/link to home -->
+    <a routerLink="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+      <img src="assets/icons/flopkart-logo.png" alt="" class="w-auto" style="height: 40px" />
+      <img
+        src="assets/icons/flopkart-text.png"
+        alt="Flopkart"
+        class="w-auto"
+        style="height: 24px"
+      />
+    </a>
+
+    <!-- Desktop navigation (hidden on mobile) -->
+    <ul
+      class="hidden md:flex items-center gap-6 text-sm font-medium"
+      style="color: var(--color-text)"
+    >
+      <li>
+        <a
+          routerLink="/products"
+          routerLinkActive
+          [routerLinkActiveOptions]="{ exact: true }"
+          #homeLink="routerLinkActive"
+          [attr.aria-current]="homeLink.isActive ? 'page' : null"
+          class="px-3 py-2 rounded-md transition-all hover:bg-gray-50"
+          [style.color]="homeLink.isActive ? 'var(--flopkart-blue)' : 'var(--color-text)'"
+          [style.font-weight]="homeLink.isActive ? '600' : '500'"
+          i18n="@@navProducts"
+          >Products</a
+        >
+      </li>
+      @if (authService.isOwner()) {
+        <!-- Admin link: create product -->
+        <li>
+          <a
+            routerLink="/add-product"
+            routerLinkActive
+            #addLink="routerLinkActive"
+            [attr.aria-current]="addLink.isActive ? 'page' : null"
+            class="px-3 py-2 rounded-md transition-all hover:bg-gray-50"
+            [style.color]="addLink.isActive ? 'var(--flopkart-blue)' : 'var(--color-text)'"
+            [style.font-weight]="addLink.isActive ? '600' : '500'"
+            i18n="@@navAddProduct"
+            >Add Product</a
+          >
+        </li>
+      }
+      @if (authService.isLoggedIn()) {
+        <!-- User greeting and role badge -->
+        @if (authService.isBuyer()) {
+          <li><app-cart-icon /></li>
+        }
+        <li class="flex items-center gap-2 ml-2">
+          <span class="font-medium text-sm" style="color: var(--color-text)">{{
+            authService.displayName()
+          }}</span>
+        </li>
+        <!-- Logout button -->
+        <li>
+          <button
+            (click)="logout()"
+            class="font-semibold px-4 py-2 rounded-md transition-all hover:bg-gray-100"
+            style="color: var(--flopkart-grey)"
+            i18n="@@navLogout"
+          >
+            Logout
+          </button>
+        </li>
+      } @else {
+        <!-- Login button (when not logged in) -->
+        <li>
+          <a
+            routerLink="/login"
+            routerLinkActive
+            #loginLink="routerLinkActive"
+            [attr.aria-current]="loginLink.isActive ? 'page' : null"
+            class="font-semibold px-5 py-2.5 rounded-lg text-white transition-all hover:shadow-md"
+            style="background-color: var(--flopkart-blue)"
+            onmouseover="this.style.backgroundColor = 'var(--color-hover)'"
+            onmouseout="this.style.backgroundColor = 'var(--flopkart-blue)'"
+            onfocus="this.style.backgroundColor = 'var(--color-hover)'"
+            onblur="this.style.backgroundColor = 'var(--flopkart-blue)'"
+            i18n="@@navLogin"
+            >Login</a
+          >
+        </li>
+      }
+    </ul>
+
+    <!-- Mobile menu button -->
+    <div class="flex items-center gap-3 md:hidden">
+      @if (authService.isBuyer()) {
+        <app-cart-icon />
+      }
+      <button
+        (click)="toggleMenu()"
+        class="p-2 rounded transition-all hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2"
+        style="color: var(--color-text); --tw-ring-color: var(--flopkart-blue)"
+        [attr.aria-expanded]="menuOpen()"
+        [class.menu-open]="menuOpen()"
+      >
+        <span class="sr-only" i18n="@@toggleMenu">Toggle menu</span>
+        <div class="hamburger-icon">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </div>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile dropdown menu (shown when toggleMenu is true) -->
+  @if (menuOpen()) {
+    <div class="mobile-menu-dropdown md:hidden" style="background-color: var(--flopkart-blue)">
+      <ul class="flex flex-col gap-1 text-sm font-medium pt-2 px-4 pb-4 items-center">
+        <li>
+          <a
+            routerLink="/products"
+            (click)="closeMenu()"
+            class="mobile-menu-item"
+            i18n="@@navProducts"
+            >Products</a
+          >
+        </li>
+        @if (authService.isBuyer()) {
+          <li>
+            <a routerLink="/cart" (click)="closeMenu()" class="mobile-menu-item" i18n="@@navCart"
+              >Cart</a
+            >
+          </li>
+        }
+        @if (authService.isOwner()) {
+          <li>
+            <a
+              routerLink="/add-product"
+              (click)="closeMenu()"
+              class="mobile-menu-item"
+              i18n="@@navAddProduct"
+              >Add Product</a
+            >
+          </li>
+        }
+        @if (authService.isLoggedIn()) {
+          <li class="flex items-center gap-2 py-2 px-3">
+            <span class="text-sm text-white">{{ authService.displayName() }}</span>
+            @if (authService.isOwner()) {
+              <span
+                class="text-xs font-bold px-2 py-0.5 rounded border"
+                style="border-color: var(--flopkart-yellow); color: var(--flopkart-yellow)"
+                i18n="@@roleOwner"
+                >[OWNER]</span
+              >
+            } @else {
+              <span
+                class="text-xs font-bold px-2 py-0.5 rounded border"
+                style="border-color: var(--flopkart-yellow); color: var(--flopkart-yellow)"
+                i18n="@@roleBuyer"
+                >[BUYER]</span
+              >
+            }
+          </li>
+          <li>
+            <button
+              (click)="logout()"
+              class="mobile-menu-item mobile-menu-logout"
+              i18n="@@navLogout"
+            >
+              Logout
+            </button>
+          </li>
+        } @else {
+          <li>
+            <a
+              routerLink="/login"
+              (click)="closeMenu()"
+              class="mobile-menu-item mobile-menu-login"
+              i18n="@@navLogin"
+              >Login</a
+            >
+          </li>
+        }
+      </ul>
+    </div>
+  }
+</header>
+
+<!-- Logout feedback overlay -->
+@if (loggingOut()) {
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center"
+    style="background-color: rgba(0, 0, 0, 0.7)"
+  >
+    <div class="bg-white rounded-lg shadow-2xl p-8 text-center animate-scale">
+      <div class="mb-4">
+        <svg
+          class="mx-auto h-16 w-16 text-blue-500"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+          />
+        </svg>
+      </div>
+      <h2 class="text-xl font-bold mb-2" style="color: var(--flopkart-dark)" i18n="@@loggingOut">
+        Logging Out...
+      </h2>
+      <p class="mb-4" style="color: var(--color-text-light)" i18n="@@redirectingToLogin">
+        Reloading Please Wait...
+      </p>
+      <div class="flex justify-center">
+        <div
+          class="animate-spin rounded-full h-8 w-8 border-b-2"
+          style="border-color: var(--flopkart-blue)"
+        ></div>
+      </div>
+    </div>
+  </div>
+}

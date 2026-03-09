@@ -1,0 +1,148 @@
+@if ((cartService.items$ | async)?.length === 0) {
+  <!-- Empty cart message with shopping cart icon -->
+  <div class="text-center py-12 sm:py-16">
+    <svg
+      class="mx-auto h-12 sm:h-16 w-12 sm:w-16 mb-3 sm:mb-4"
+      style="color: var(--color-text-light)"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.5"
+        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.4 7h12.8M7 13h10M9 21a1 1 0 100-2 1 1 0 000 2zm10 0a1 1 0 100-2 1 1 0 000 2z"
+      />
+    </svg>
+    <p class="text-base sm:text-lg" style="color: var(--color-text-light)" i18n="@@cartEmpty">
+      Your cart is empty.
+    </p>
+  </div>
+} @else {
+  <!-- Cart items list (table-like structure) -->
+  <ul class="divide-y" style="border-color: var(--flopkart-border)">
+    @for (item of items(); track item.productId) {
+      <app-cart-row
+        [item]="item"
+        (increment)="onCartAction('increment', item.productId)"
+        (decrement)="onCartAction('decrement', item.productId)"
+        (confirmRemove)="confirmRemove(item.productId)"
+      />
+    }
+  </ul>
+  <!-- Cart total with clear button -->
+  <div
+    class="flex justify-between items-center flex-col sm:flex-row sm:items-center gap-2 pt-4 sm:pt-6 border-t mt-4 sm:mt-6"
+    style="border-color: var(--flopkart-border)"
+  >
+    <span class="text-lg sm:text-xl font-semibold" style="color: var(--color-text)" i18n="@@total"
+      >Total:</span
+    >
+    <span class="text-xl sm:text-2xl font-bold" style="color: var(--flopkart-blue)">{{
+      cartService.totalPrice$ | async | currency
+    }}</span>
+  </div>
+  <div class="mt-3 sm:mt-4 flex justify-end">
+    <button
+      (click)="confirmClear()"
+      class="text-xs sm:text-sm font-medium hover:underline transition-all"
+      style="color: var(--flopkart-red)"
+      i18n="@@clearCart"
+    >
+      Clear Cart
+    </button>
+  </div>
+
+  <!-- Clear Cart Confirmation Modal -->
+  @if (clearConfirm()) {
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style="background-color: rgba(0, 0, 0, 0.5)"
+      (click)="cancelClear()"
+      (keydown.enter)="cancelClear()"
+      (window:keydown.escape)="cancelClear()"
+    >
+      <div
+        class="bg-white rounded-lg shadow-2xl max-w-md w-full p-6 animate-scale"
+        (click)="$event.stopPropagation()"
+        (keydown.enter)="$event.stopPropagation()"
+      >
+        <h2
+          class="text-xl font-bold mb-3"
+          style="color: var(--flopkart-dark)"
+          i18n="@@confirmClearTitle"
+        >
+          Clear Cart?
+        </h2>
+        <p class="mb-6" style="color: var(--color-text)" i18n="@@confirmClearMessage">
+          Are you sure you want to remove all items from your cart? This action cannot be undone.
+        </p>
+        <div class="flex gap-3 justify-end">
+          <button
+            (click)="cancelClear()"
+            class="px-5 py-2.5 rounded-lg font-semibold transition-all hover:bg-gray-100"
+            style="color: var(--flopkart-grey); border: 1px solid var(--flopkart-border)"
+            i18n="@@cancel"
+          >
+            Cancel
+          </button>
+          <button
+            (click)="clearCart()"
+            class="px-5 py-2.5 rounded-lg font-semibold text-white transition-all hover:opacity-90"
+            style="background-color: var(--flopkart-red)"
+            i18n="@@confirmClear"
+          >
+            Clear Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Remove Item Confirmation Modal -->
+  @if (removeConfirm() !== null) {
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style="background-color: rgba(0, 0, 0, 0.5)"
+      (click)="cancelRemove()"
+      (keydown.enter)="cancelRemove()"
+      (window:keydown.escape)="cancelRemove()"
+    >
+      <div
+        class="bg-white rounded-lg shadow-2xl max-w-md w-full p-6 animate-scale"
+        (click)="$event.stopPropagation()"
+        (keydown.enter)="$event.stopPropagation()"
+      >
+        <h2
+          class="text-xl font-bold mb-3"
+          style="color: var(--flopkart-dark)"
+          i18n="@@confirmRemoveTitle"
+        >
+          Remove Item?
+        </h2>
+        <p class="mb-6" style="color: var(--color-text)" i18n="@@confirmRemoveMessage">
+          Are you sure you want to remove this item from your cart?
+        </p>
+        <div class="flex gap-3 justify-end">
+          <button
+            (click)="cancelRemove()"
+            class="px-5 py-2.5 rounded-lg font-semibold transition-all hover:bg-gray-100"
+            style="color: var(--flopkart-grey); border: 1px solid var(--flopkart-border)"
+            i18n="@@cancel"
+          >
+            Cancel
+          </button>
+          <button
+            (click)="remove(removeConfirm()!)"
+            class="px-5 py-2.5 rounded-lg font-semibold text-white transition-all hover:opacity-90"
+            style="background-color: var(--flopkart-red)"
+            i18n="@@confirmRemove"
+          >
+            Remove Item
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+}

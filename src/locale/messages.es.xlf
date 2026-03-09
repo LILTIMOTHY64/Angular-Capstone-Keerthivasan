@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" target-language="es" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="appName" datatype="html">
+        <source>Flopkart</source>
+        <target>Flopkart</target>
+      </trans-unit>
+      <trans-unit id="navHome" datatype="html">
+        <source>Home</source>
+        <target>Inicio</target>
+      </trans-unit>
+      <trans-unit id="navCart" datatype="html">
+        <source>Cart</source>
+        <target>Carrito</target>
+      </trans-unit>
+      <trans-unit id="navManage" datatype="html">
+        <source>Manage</source>
+        <target>Gestionar</target>
+      </trans-unit>
+      <trans-unit id="navLogin" datatype="html">
+        <source>Login</source>
+        <target>Iniciar Sesión</target>
+      </trans-unit>
+      <trans-unit id="navLogout" datatype="html">
+        <source>Logout</source>
+        <target>Cerrar Sesión</target>
+      </trans-unit>
+      <trans-unit id="footerCopyright" datatype="html">
+        <source>© 2026 Flopkart. All rights reserved.</source>
+        <target>© 2026 Flopkart. Todos los derechos reservados.</target>
+      </trans-unit>
+      <trans-unit id="loading" datatype="html">
+        <source>Loading...</source>
+        <target>Cargando...</target>
+      </trans-unit>
+      <trans-unit id="signInPage" datatype="html">
+        <source>Sign In to Flopkart</source>
+        <target>Iniciar Sesión en Flopkart</target>
+      </trans-unit>
+      <trans-unit id="labelEmail" datatype="html">
+        <source>Email</source>
+        <target>Correo Electrónico</target>
+      </trans-unit>
+      <trans-unit id="labelPassword" datatype="html">
+        <source>Password</source>
+        <target>Contraseña</target>
+      </trans-unit>
+      <trans-unit id="emailError" datatype="html">
+        <source>Please enter a valid email address.</source>
+        <target>Por favor ingrese una dirección de correo electrónico válida.</target>
+      </trans-unit>
+      <trans-unit id="passwordError" datatype="html">
+        <source>Password must be at least 6 characters.</source>
+        <target>La contraseña debe tener al menos 6 caracteres.</target>
+      </trans-unit>
+      <trans-unit id="btnLogin" datatype="html">
+        <source>Sign In</source>
+        <target>Iniciar Sesión</target>
+      </trans-unit>
+      <trans-unit id="productsTitle" datatype="html">
+        <source>Our Products</source>
+        <target>Nuestros Productos</target>
+      </trans-unit>
+      <trans-unit id="noProducts" datatype="html">
+        <source>No products found.</source>
+        <target>No se encontraron productos.</target>
+      </trans-unit>
+      <trans-unit id="addToCart" datatype="html">
+        <source>Add to Cart</source>
+        <target>Agregar al Carrito</target>
+      </trans-unit>
+      <trans-unit id="cartTitle" datatype="html">
+        <source>Your Cart</source>
+        <target>Tu Carrito</target>
+      </trans-unit>
+      <trans-unit id="cartEmpty" datatype="html">
+        <source>Your cart is empty.</source>
+        <target>Tu carrito está vacío.</target>
+      </trans-unit>
+      <trans-unit id="total" datatype="html">
+        <source>Total:</source>
+        <target>Total:</target>
+      </trans-unit>
+      <trans-unit id="remove" datatype="html">
+        <source>Remove</source>
+        <target>Eliminar</target>
+      </trans-unit>
+      <trans-unit id="btnCheckout" datatype="html">
+        <source>Checkout</source>
+        <target>Finalizar Compra</target>
+      </trans-unit>
+      <trans-unit id="backToProducts" datatype="html">
+        <source>← Back to Products</source>
+        <target>← Volver a Productos</target>
+      </trans-unit>
+      <trans-unit id="category" datatype="html">
+        <source>Category:</source>
+        <target>Categoría:</target>
+      </trans-unit>
+      <trans-unit id="stock" datatype="html">
+        <source>In stock:</source>
+        <target>En stock:</target>
+      </trans-unit>
+      <trans-unit id="manageTitle" datatype="html">
+        <source>Manage Products</source>
+        <target>Gestionar Productos</target>
+      </trans-unit>
+      <trans-unit id="addProduct" datatype="html">
+        <source>Add New Product</source>
+        <target>Agregar Nuevo Producto</target>
+      </trans-unit>
+      <trans-unit id="editProduct" datatype="html">
+        <source>Edit Product</source>
+        <target>Editar Producto</target>
+      </trans-unit>
+      <trans-unit id="cancelEdit" datatype="html">
+        <source>Cancel</source>
+        <target>Cancelar</target>
+      </trans-unit>
+      <trans-unit id="allProducts" datatype="html">
+        <source>All Products</source>
+        <target>Todos los Productos</target>
+      </trans-unit>
+      <trans-unit id="noProductsYet" datatype="html">
+        <source>No products yet.</source>
+        <target>Aún no hay productos.</target>
+      </trans-unit>
+      <trans-unit id="labelName" datatype="html">
+        <source>Name</source>
+        <target>Nombre</target>
+      </trans-unit>
+      <trans-unit id="labelDescription" datatype="html">
+        <source>Description</source>
+        <target>Descripción</target>
+      </trans-unit>
+      <trans-unit id="labelPrice" datatype="html">
+        <source>Price</source>
+        <target>Precio</target>
+      </trans-unit>
+      <trans-unit id="labelStock" datatype="html">
+        <source>Stock</source>
+        <target>Stock</target>
+      </trans-unit>
+      <trans-unit id="labelCategory" datatype="html">
+        <source>Category</source>
+        <target>Categoría</target>
+      </trans-unit>
+      <trans-unit id="labelImageUrl" datatype="html">
+        <source>Image URL</source>
+        <target>URL de Imagen</target>
+      </trans-unit>
+      <trans-unit id="btnSave" datatype="html">
+        <source>Save Product</source>
+        <target>Guardar Producto</target>
+      </trans-unit>
+      <trans-unit id="nameError" datatype="html">
+        <source>Name is required (min 2 characters).</source>
+        <target>El nombre es obligatorio (mínimo 2 caracteres).</target>
+      </trans-unit>
+      <trans-unit id="edit" datatype="html">
+        <source>Edit</source>
+        <target>Editar</target>
+      </trans-unit>
+      <trans-unit id="delete" datatype="html">
+        <source>Delete</source>
+        <target>Eliminar</target>
+      </trans-unit>
+      <trans-unit id="filterByCategory" datatype="html">
+        <source>Filter:</source>
+        <target>Filtrar:</target>
+      </trans-unit>
+      <trans-unit id="allCategories" datatype="html">
+        <source>All Categories</source>
+        <target>Todas las Categorías</target>
+      </trans-unit>
+      <trans-unit id="navProducts" datatype="html">
+        <source>Products</source>
+        <target>Productos</target>
+      </trans-unit>
+      <trans-unit id="toggleMenu" datatype="html">
+        <source>Toggle menu</source>
+        <target>Alternar menú</target>
+      </trans-unit>
+      <trans-unit id="navAddProduct" datatype="html">
+        <source>Add Product</source>
+        <target>Agregar Producto</target>
+      </trans-unit>
+      <trans-unit id="roleOwner" datatype="html">
+        <source>OWNER</source>
+        <target>PROPIETARIO</target>
+      </trans-unit>
+      <trans-unit id="roleBuyer" datatype="html">
+        <source>BUYER</source>
+        <target>COMPRADOR</target>
+      </trans-unit>
+      <trans-unit id="loggingOut" datatype="html">
+        <source>Logging Out...</source>
+        <target>Cerrando Sesión...</target>
+      </trans-unit>
+      <trans-unit id="redirectingToLogin" datatype="html">
+        <source>Redirecting to login page</source>
+        <target>Redirigiendo a la página de inicio de sesión</target>
+      </trans-unit>
+      <trans-unit id="deleteProduct" datatype="html">
+        <source>Delete Product</source>
+        <target>Eliminar Producto</target>
+      </trans-unit>
+      <trans-unit id="confirmDeleteTitle" datatype="html">
+        <source>Delete Product?</source>
+        <target>¿Eliminar Producto?</target>
+      </trans-unit>
+      <trans-unit id="confirmDeleteMessage" datatype="html">
+        <source>Are you sure you want to delete this product? This action cannot be undone.</source>
+        <target>¿Está seguro de que desea eliminar este producto? Esta acción no se puede deshacer.</target>
+      </trans-unit>
+      <trans-unit id="cancel" datatype="html">
+        <source>Cancel</source>
+        <target>Cancelar</target>
+      </trans-unit>
+      <trans-unit id="confirmDelete" datatype="html">
+        <source>Delete Product</source>
+        <target>Eliminar Producto</target>
+      </trans-unit>
+      <trans-unit id="labelTitle" datatype="html">
+        <source>Title</source>
+        <target>Título</target>
+      </trans-unit>
+      <trans-unit id="titleError" datatype="html">
+        <source>Title is required (min 2 characters).</source>
+        <target>El título es obligatorio (mínimo 2 caracteres).</target>
+      </trans-unit>
+      <trans-unit id="imageError" datatype="html">
+        <source>A valid image URL starting with http(s):// is required.</source>
+        <target>Se requiere una URL de imagen válida que comience con http(s)://.</target>
+      </trans-unit>
+      <trans-unit id="savedSuccess" datatype="html">
+        <source>{$START_BLOCK_IF} Product updated successfully! {$CLOSE_BLOCK_IF}{$START_BLOCK_ELSE} Product created successfully! {$CLOSE_BLOCK_ELSE}</source>
+        <target>{$START_BLOCK_IF} ¡Producto actualizado exitosamente! {$CLOSE_BLOCK_IF}{$START_BLOCK_ELSE} ¡Producto creado exitosamente! {$CLOSE_BLOCK_ELSE}</target>
+      </trans-unit>
+      <trans-unit id="redirectingToProduct" datatype="html">
+        <source>Redirecting to product page...</source>
+        <target>Redirigiendo a la página del producto...</target>
+      </trans-unit>
+      <trans-unit id="redirectingToHome" datatype="html">
+        <source>Redirecting to home page...</source>
+        <target>Redirigiendo a la página de inicio...</target>
+      </trans-unit>
+      <trans-unit id="clearCart" datatype="html">
+        <source>Clear Cart</source>
+        <target>Vaciar Carrito</target>
+      </trans-unit>
+      <trans-unit id="confirmClearTitle" datatype="html">
+        <source>Clear Cart?</source>
+        <target>¿Vaciar Carrito?</target>
+      </trans-unit>
+      <trans-unit id="confirmClearMessage" datatype="html">
+        <source>Are you sure you want to remove all items from your cart? This action cannot be undone.</source>
+        <target>¿Está seguro de que desea eliminar todos los artículos de su carrito? Esta acción no se puede deshacer.</target>
+      </trans-unit>
+      <trans-unit id="confirmClear" datatype="html">
+        <source>Clear Cart</source>
+        <target>Vaciar Carrito</target>
+      </trans-unit>
+      <trans-unit id="confirmRemoveTitle" datatype="html">
+        <source>Remove Item?</source>
+        <target>¿Eliminar Artículo?</target>
+      </trans-unit>
+      <trans-unit id="confirmRemoveMessage" datatype="html">
+        <source>Are you sure you want to remove this item from your cart?</source>
+        <target>¿Está seguro de que desea eliminar este artículo de su carrito?</target>
+      </trans-unit>
+      <trans-unit id="confirmRemove" datatype="html">
+        <source>Remove Item</source>
+        <target>Eliminar Artículo</target>
+      </trans-unit>
+      <trans-unit id="cartItems" datatype="html">
+        <source>Items</source>
+        <target>Artículos</target>
+      </trans-unit>
+      <trans-unit id="grandTotal" datatype="html">
+        <source>Grand Total</source>
+        <target>Total General</target>
+      </trans-unit>
+      <trans-unit id="continueShopping" datatype="html">
+        <source>Continue Shopping</source>
+        <target>Continuar Comprando</target>
+      </trans-unit>
+      <trans-unit id="loginWelcome" datatype="html">
+        <source>Your trusted online store for quality products at great prices</source>
+        <target>Tu tienda en línea de confianza para productos de calidad a excelentes precios</target>
+      </trans-unit>
+      <trans-unit id="signIn" datatype="html">
+        <source>Sign In</source>
+        <target>Iniciar Sesión</target>
+      </trans-unit>
+      <trans-unit id="loginSubtitle" datatype="html">
+        <source>Welcome back! Please enter your credentials</source>
+        <target>¡Bienvenido de nuevo! Por favor ingrese sus credenciales</target>
+      </trans-unit>
+      <trans-unit id="labelUsername" datatype="html">
+        <source>Username</source>
+        <target>Nombre de Usuario</target>
+      </trans-unit>
+      <trans-unit id="demoCredentials" datatype="html">
+        <source>Demo Credentials</source>
+        <target>Credenciales de Demostración</target>
+      </trans-unit>
+      <trans-unit id="usernameError" datatype="html">
+        <source> Username is required (min 3 characters). </source>
+        <target> El nombre de usuario es obligatorio (mínimo 3 caracteres). </target>
+      </trans-unit>
+      <trans-unit id="welcomeTitle" datatype="html">
+        <source>Welcome to Flopkart</source>
+        <target>Bienvenido a Flopkart</target>
+      </trans-unit>
+      <trans-unit id="featureShop" datatype="html">
+        <source>Shop Products</source>
+        <target>Comprar Productos</target>
+      </trans-unit>
+      <trans-unit id="featureDelivery" datatype="html">
+        <source>Fast Delivery</source>
+        <target>Entrega Rápida</target>
+      </trans-unit>
+      <trans-unit id="featurePayment" datatype="html">
+        <source>Secure Payment</source>
+        <target>Pago Seguro</target>
+      </trans-unit>
+      <trans-unit id="buyerLabel" datatype="html">
+        <source>Buyer:</source>
+        <target>Comprador:</target>
+      </trans-unit>
+      <trans-unit id="ownerLabel" datatype="html">
+        <source>Owner:</source>
+        <target>Propietario:</target>
+      </trans-unit>
+      <trans-unit id="constructionTitle" datatype="html">
+        <source>Coming Soon!</source>
+        <target>¡Próximamente!</target>
+      </trans-unit>
+      <trans-unit id="constructionMessage" datatype="html">
+        <source>We're still building the checkout feature. Please check back soon!</source>
+        <target>Aún estamos construyendo la función de compra. ¡Por favor, regresa pronto!</target>
+      </trans-unit>
+      <trans-unit id="okButton" datatype="html">
+        <source>OK</source>
+        <target>OK</target>
+      </trans-unit>
+      <trans-unit id="previousPage" datatype="html">
+        <source>← Previous</source>
+        <target>← Anterior</target>
+      </trans-unit>
+      <trans-unit id="nextPage" datatype="html">
+        <source>Next →</source>
+        <target>Siguiente →</target>
+      </trans-unit>
+      <trans-unit id="pageInfo" datatype="html">
+        <source>Page {0} of {1}</source>
+        <target>Página {0} de {1}</target>
+      </trans-unit>
+      <trans-unit id="loggedInTitle" datatype="html">
+        <source>Welcome!</source>
+        <target>¡Bienvenido!</target>
+      </trans-unit>
+      <trans-unit id="redirectingMessage" datatype="html">
+        <source>Redirecting to products list...</source>
+        <target>Redirigiendo a la lista de productos...</target>
+      </trans-unit>
+      <trans-unit id="productDeletedSuccess" datatype="html">
+        <source>Product deleted successfully!</source>
+        <target>¡Producto eliminado con éxito!</target>
+      </trans-unit>
+      <trans-unit id="redirectingToProducts" datatype="html">
+        <source>Redirecting to products list...</source>
+        <target>Redirigiendo a la lista de productos...</target>
+      </trans-unit>
+      <trans-unit id="redirectingToAllProducts" datatype="html">
+        <source>Redirecting to All Products page...</source>
+        <target>Redirigiendo a la página de todos los productos...</target>
+      </trans-unit>
+      <trans-unit id="loginToAddCart" datatype="html">
+        <source>Log in to add items to cart</source>
+        <target>Inicia sesión para agregar artículos al carrito</target>
+      </trans-unit>
+      <trans-unit id="selectCategory" datatype="html">
+        <source>Choose a category</source>
+        <target>Elige una categoría</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
