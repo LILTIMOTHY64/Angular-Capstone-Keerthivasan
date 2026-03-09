@@ -58,23 +58,46 @@ A modern e-commerce Angular application with real API integration, cart persiste
 ```
 src/
   app/
-    features/
-      products/         # product-card, product-list-page, product-detail-page,
-                       # product-manage-page (create/edit), product-form
-      cart/             # cart-view (display), cart-icon (badge), cart-page
-      auth/             # login-page
-    shared/             # header, footer, error-message, loading-spinner
-    service/
-      auth.service.ts          # DummyJSON JWT authentication
-      cart.service.ts          # Cart state with localStorage persistence
-      api.service.ts           # HTTP client for products
-      auth.guard.ts            # Functional route guards
-      error.service.ts         # Global error handling
-      loading.service.ts       # Loading state management
-  locale/               # messages.xlf (i18n - English & Spanish)
-  styles.css            # Tailwind entry + global CSS variables
+    pages/
+      product-list-page/    # Browse products, category filter, pagination
+      product-detail-page/  # Single product view with cart controls
+      product-manage-page/  # Add / edit product form (owner only)
+      cart-page/            # Cart shell with checkout modal stub
+      login-page/           # Login form with redirect on success
+      not-found-page/       # 404 wildcard route
+    components/
+      products/
+        product-card/       # Presentational card (inputs: product, quantity; outputs: add, increment, decrement, edit, remove)
+        product-form/       # Reactive form for create / edit (inputs: product?, categories)
+      cart/
+        cart-view/          # Cart items list with quantity controls and modals
+        cart-row/           # Presentational single cart row (outputs: increment, decrement, confirmRemove)
+        cart-icon/          # Header badge showing total item count
+    shared/
+      header/               # App header with navigation and cart icon
+      footer/               # App footer
+      error-message/        # Global error display
+      loading-spinner/      # Global loading indicator
+    services/
+      auth.service.ts       # DummyJSON JWT authentication, session persistence
+      cart.service.ts       # Cart state (BehaviorSubject + localStorage)
+      api.service.ts        # HTTP client for products and categories
+      error.service.ts      # Global error handling
+      loading.service.ts    # Loading state management
+    guards/
+      auth.guard.ts         # Redirects unauthenticated users to /login
+      no-auth.guard.ts      # Redirects logged-in users away from /login
+      owner.guard.ts        # Restricts routes to owners; redirects to /404
+      buyer.guard.ts        # Restricts routes to buyers
+    models/
+      product.model.ts      # Product interface
+      cart.model.ts         # CartItem interface, CartAction type
+    app.routes.ts           # Routes with lazy loading, guards, and data.title
+    app.config.ts           # provideRouter, provideHttpClient, provideClientHydration
+    app.component.ts        # Root component; sets dynamic page title on NavigationEnd
+  locale/
+    messages.xlf            # i18n source strings (English)
+    messages.es.xlf         # Spanish translations
+  styles.css                # Tailwind entry + global CSS variables
   main.ts
-  app.config.ts         # Provider configuration + APP_INITIALIZER for cart
-  app.routes.ts         # Lazy-loaded routes with guards
-  app.component.ts
 ```
